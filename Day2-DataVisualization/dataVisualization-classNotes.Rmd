@@ -1,0 +1,178 @@
+---
+title: " Computing in Oceanography: data visualization"
+output: html_notebook
+---
+
+An important aspect of a scientist's job is how to present or visualize their data. The goal is to **display information as clearly and simply as possible**. 
+
+Yesterday, we used an online plotting tool (Tuva) to make oceanographic profile plots. It was interactive, and fun to use, but there were some problems with it:
+
+1. Pre-prepared and formatted dataset
+2. Limited plotting options
+3. Reproducibility
+
+Excel or Google Sheets are platforms scientists use to do data visualization and analysis, but they can still have the same limitations as above, especially when we start to work with **a lot** of data. Often scientists in oceanography have a lot of data to deal with, and using computing and programming tools are becomming an indispensible part of doing science. 
+
+#### **Today's Goal: learn how to plot oceanographic profiles using the computing language R**
+
+### Set-up 
+
+1. Create a folder on your computer for the Computing in Oceanography work *don't use spaces in the name!* 
+   e.g. `Jterm2020-computingInOceanography`
+2. Create a subfolder (i.e. a folder within that folder) for today's class e.g. `dataVisualization` (*again, no spaces!*)
+
+## Introduction to R
+
+### Installing R and RStudio
+
+1.  Install R program at: http://cran.rstudio.com/ . This site has options for download for Linux, Mac, and Windows
+ 
+2.  Install r-studio  (R interface)
+http://www.rstudio.com/products/rstudio/download/ . Under “installers” you should see options for Mac and Windows
+
+### R Basics 
+
+#### RStudio
+RStudio is a program to help you use R. You can write a bunch of R commands in a *script*, you can access help and documentation, you can see any plots you make. 
+
+#### Set a working directory
+
+At the start of a sesssion, set the working directory:
+```{r}
+setwd('V://Catherine//Teaching//MSSM//Jterm2020//Jterm2020-computingInOceanography//dataVisualization//')                                               
+```
+Note: You will get error message if folder does not exist.
+
+#### Use R as a calculator
+
+```{r}
+5+6
+5*6
+5/6
+```
+
+#### Objects
+You can assign values to an "object" (we call these *numeric*) e.g.
+```{r}
+x <- 5
+y <- 6
+x
+x + y
+y <- 5
+x + y
+```
+You can also assign letters or words to an object (we call these *characters* or *strings*) e.g.
+```{r}
+day <- "Monday"
+day
+month <- "January"
+month
+```
+
+You can have two objects together within another object e.g.
+```{r}
+dayMonth <- c(day,month)
+dayMonth
+```
+This combined object `dayMonth` is called a *vector*, and each object within the vector is known as an *element*.
+
+You can even mix up the types of objects, but the numeric is changed to a character e.g. 
+```{r}
+mixedObject <- c(day,x,y,month)
+mixedObject
+```
+i.e. the second and third elements within the mixedObject are no longer numbers, they are characters.
+
+#### Indexing
+If we have a vector, we can extract out one of the elements e.g.
+```{r}
+mixedObject[4]
+```
+Or we can extract however many elements we want, we just need to specify the location (or *index number*) of the element within the vector
+```{r}
+mixedObject[c(3,4)]
+```
+
+There's lots of good resources online - **the internet is your friend when programming**.
+
+
+## Plotting an oceanographic profile
+
+#### Initialization
+
+Launch R-studio and navigate to the directory you want to work in.
+
+```{r}
+setwd('V://Catherine//Teaching//MSSM//Jterm2020//Jterm2020-computingInOceanography//dataVisualization//')  
+```
+
+#### Create a script
+
+We are going to write all of our commands within a *script*. A script is just a document that has a series of R commands, and when you run it, all the commands are run in one go. It is **really useful** for redoing analyses, or remaking plots, or just remembering what you did yesterday.
+
+#### Load data
+UP TO HERE DOOOOONNNNEEEE
+Load the data you want to plot. Here, the file name is “Lab01example.csv”. The data contained in that file are loaded into a variable called “DATA”. Note: Different file formats will be read in differently. We’ll cover this.
+
+   ```DATA <- read.csv('Lab01example.csv')```  
+
+   In the command above, we didn’t have to call the variable “DATA”. We could have called it something else, like “STATION_4”, “X”, or “Pinocchio”.
+
+3. Look at a summary of what is in this variable.
+
+   ```summary(DATA)```  
+   
+   Something like this will show on the screen, summarizing the data in “DATA”:  
+
+```
+Depth..M.        Temp..deg.C.    Salinity..PSU.    Density..kg.m.3. 
+ Min.   :  0.166   Min.   : 8.871   Min.   : 0.8708   Min.   : 0.2984  
+ 1st Qu.: 17.636   1st Qu.:10.526   1st Qu.:32.9609   1st Qu.:25.1233  
+ Median : 44.685   Median :10.892   Median :33.2506   Median :25.4006  
+ Mean   : 47.196   Mean   :10.857   Mean   :32.3029   Mean   :24.7033  
+ 3rd Qu.: 74.919   3rd Qu.:11.271   3rd Qu.:33.4374   3rd Qu.:25.6468  
+ Max.   :101.451   Max.   :11.380   Max.   :33.4619   Max.   :25.7321  
+```
+4. Make a basic oceanographic profile. To plot temperature (column 2) against depth (column 1):
+
+   ```plot(DATA[,2],-DATA[,1])```  
+   
+   Another option is to use the column headings instead of the column numbers:
+
+   ```plot(DATA[['Temp..deg.C.']],-DATA[['Depth..M.']])```  
+   
+   And finally, here is an example of some of the options to make the figure nicer (note the options for labeling axes (xlab, ylab), setting the axis limits (xlim, ylim) and making it a blue line. There are lots of other options to customize the figure.
+   
+   ```
+   plot(DATA[['Temp..deg.C.']],-DATA[['Depth..M.']],
+    xlab='Temperature (deg C)',ylab='Depth (m)',
+    xlim=c(10,11.5),ylim=c(-100,0))
+   ```
+5. Save the figure using these two commands:
+
+   ```
+   dev.copy(png,'ExampleFigure.png')
+   dev.off()
+   ```
+
+![](https://github.com/SeascapeScience/Rbigelow/blob/master/Tutorials/Colby2018/Lab1/ExampleFigure.png)
+
+### ASSIGNMENT (in lab)
+
+1. The figure is starting to look better, but still needs work.
+
+   Here is a list of arguments that can be used with the `plot()` command can be found in these resources:  
+
+   https://www.rdocumentation.org/packages/graphics/versions/3.5.1/topics/par  
+
+   And a series of plotting example you can run here:
+
+   https://www.rdocumentation.org/packages/graphics/versions/3.5.1/topics/plot
+
+   Experiment with some of the graphical parameters to improve the quality of the figure. Make as high a quality figure as you can. 
+
+   Write an R script that loads in the data file, plots the profile (as a high quality figure), and saves the figure as a file. **Email the R script and the image file at the end of the lab.**
+
+2.  Use the R script you wrote for question 1 and make minor modifications to plot profiles of the other parameters in this dataset. We will discuss the features of the profiles together. **Email the images from all profiles at the end of lab.**
+
+
