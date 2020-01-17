@@ -1,6 +1,8 @@
 ---
 title: ' Computing in Oceanography: data visualization'
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 An important aspect of a scientist's job is how to present or visualize their data. The goal is to **display information as clearly and simply as possible**. 
